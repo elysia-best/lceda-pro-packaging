@@ -1,0 +1,17 @@
+Source: lceda-pro
+Section: utils
+Priority: optional
+Maintainer: Elysia <39023210+elysia-best@users.noreply.github.com>
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 13),
+Standards-Version: 4.7.0
+Homepage: https://lceda.cn/
+
+Package: lceda-pro
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: 高效的国产PCB设计工具，永久免费
+ 超过400万个并且不断新增的元件库，让你更专注于设计，你也可以创建或导入自己常用的元件库和封装库
