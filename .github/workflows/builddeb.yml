@@ -1,0 +1,45 @@
+name: Build
+
+permissions: write-all
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  debian:
+    name: Building Proton on Ubuntu 22.04
+    runs-on: ubuntu-22.04
+    permissions: write-all
+    steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 20480
+          swap-size-mb: 512
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Build
+        run: |
+          sudo apt update; sudo apt install sudo git devscripts equivs build-essential -y
+
+          sudo apt-get install python3-requests python3-lxml python3-tqdm -y
+
+          python3 get_lceda_pro.py
+
+      - name: Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact
+          path: ${{ github.workspace }}/output/*
+          compression-level: 9 # maximum compression
+          if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
